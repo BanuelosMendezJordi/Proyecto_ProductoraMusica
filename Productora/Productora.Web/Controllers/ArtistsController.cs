@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using Productora.Web.Models;
 
@@ -48,6 +52,25 @@ namespace Productora.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,StageName,Email")] Artist artist)
         {
+            HttpPostedFileBase FileBase = Request.Files[0];
+
+            if (FileBase.ContentLength == 0)
+            {
+                ModelState.AddModelError("Imagen", "Es necesario seleccionar una imagen");
+            }
+
+            else
+            {
+                if (FileBase.FileName.EndsWith(".jpg"))
+                {
+                    WebImage imagen = new WebImage(FileBase.InputStream);
+                    artist.artimg = imagen.GetBytes();
+                }
+                else
+                {
+                    ModelState.AddModelError("imagen", "El sistema unicamente acepta imagenes con formato jpg");
+                }
+            }
             if (ModelState.IsValid)
             {
                 db.Artists.Add(artist);
@@ -80,8 +103,31 @@ namespace Productora.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,StageName,Email")] Artist artist)
         {
+            Artist _artist = new Artist();
+
+            HttpPostedFileBase FileBase = Request.Files[0];
+
+            if (FileBase.ContentLength == 0)
+            {
+                _artist = db.Artists.Find(artist.Id);
+                artist.artimg = _artist.artimg;
+            }
+            else
+            {
+                if (FileBase.FileName.EndsWith(".jpg"))
+                {
+                    WebImage image1 = new WebImage(FileBase.InputStream);
+                    artist.artimg = image1.GetBytes();
+                }
+                else
+                {
+                    ModelState.AddModelError("imagen", "El sistema unicamente acepta imagenes con formato jpg");
+                }
+            }
             if (ModelState.IsValid)
             {
+                db.Entry(_artist).State = EntityState.Detached;
+                db.Entry(artist).State = EntityState.Detached;
                 db.Entry(artist).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -122,6 +168,18 @@ namespace Productora.Web.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+        public ActionResult GetImagen(int id)
+        {
+            Artist artisti = db.Artists.Find(id);
+            byte[] byteImage = artisti.artimg;
+            MemoryStream memoryStream = new MemoryStream(byteImage);
+            Image image = Image.FromStream(memoryStream);
+            memoryStream = new MemoryStream();
+            image.Save(memoryStream, ImageFormat.Jpeg);
+            memoryStream.Position = 0;
+
+            return File(memoryStream, "image/jpg");
         }
     }
 }

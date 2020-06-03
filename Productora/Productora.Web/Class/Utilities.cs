@@ -19,10 +19,10 @@ namespace Productora.Web.Class
                 roleManager.Create(new IdentityRole(roleName));
             }
         }
-        public void Dispose()
-        {
-            db.Dispose();
-        }
+        //public void Dispose()
+        //{
+        //    db.Dispose();
+        //}
 
         internal static void CheckSuperUser()
         {

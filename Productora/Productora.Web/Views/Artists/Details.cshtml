@@ -25,6 +25,12 @@
         <dd>
             @Html.DisplayFor(model => model.Email)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.artimg)
+        </dt>
+        <dd>
+            <img src="@Url.Action("getimagen", "Artists", new{ id=Model.Id})" alt="aqui debe ir una imagen chida">
+        </dd>
 
     </dl>
 </div>

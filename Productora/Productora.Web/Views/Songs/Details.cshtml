@@ -55,7 +55,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Cover)
+            <img src="@Url.Action("getimagen", "Songs", new{ id=Model.Id})" alt="aqui debe ir una imagen chida">
         </dd>
 
     </dl>

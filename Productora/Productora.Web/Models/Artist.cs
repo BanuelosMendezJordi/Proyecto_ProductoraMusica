@@ -16,6 +16,7 @@ namespace Productora.Web.Models
         [Required]
         [MaxLength(45)]
         public string Email { get; set; }
+        public byte[] artimg { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
     }
 }
