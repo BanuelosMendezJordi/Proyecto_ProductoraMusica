@@ -11,19 +11,20 @@ namespace Productora.Web.Models
     {
         public int Id { get; set; }
         [Required]
-        [Display(Name ="Título")]
+        [Display(Name = "Título")]
         public string SongTitle { get; set; }
         [Display(Name = "Duración")]
         public decimal SongLength { get; set; }
+        [Display(Name = "Año de lanzamiento")]
+        public int ReleaseYear { get; set; }
         [Display(Name = "Género")]
+        [MaxLength(30)]
         public string SongGenre { get; set; }
-        //public byte[] SongSample { get; set; }
-        public string SongLanguage { get; set; }
-        public int AlbumId { get; set; }
-        [ForeignKey("AlbumId")]
-        public Album Album { get; set; }
+        [Display(Name ="Álbum")]
+        public string AlbumName { get; set; }
+        [Display(Name = "Carátula")]
+        public byte[] Cover { get; set; }
         public Artist Artist { get; set; }
-        public ICollection<Album> Albums { get; set; }
         public ICollection<Artist> Artists { get; set; }
     }
 }

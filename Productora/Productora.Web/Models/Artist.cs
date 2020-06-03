@@ -9,7 +9,6 @@ namespace Productora.Web.Models
     public class Artist
     {
         public int Id { get; set; }
-        
         [Display(Name = "Nombre Artístico")]
         [MaxLength(25)]
         public string StageName { get; set; }
