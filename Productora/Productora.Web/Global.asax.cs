@@ -1,3 +1,4 @@
+using Productora.Web.Class;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,16 @@ namespace Productora.Web
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            this.CheckRoles();
+            Utilities.CheckSuperUser();
+            Utilities.CheckClientDefault();
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+
+        private void CheckRoles()
+        {
+            Utilities.CheckRoles("Admin");
+            Utilities.CheckRoles("Artist");
         }
     }
 }
